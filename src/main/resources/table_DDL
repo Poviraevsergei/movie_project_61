@@ -1,0 +1,86 @@
+create table user_table
+(
+	id bigserial not null
+		constraint user_table_pk
+			primary key,
+	first_name varchar(50),
+	last_name varchar(50),
+	login varchar(50) not null,
+	password varchar(50) not null,
+	created date,
+	changed date,
+	email varchar(50),
+	birthday_date date,
+	is_deleted boolean default false,
+	telephone varchar(50)
+);
+
+alter table user_table owner to postgres;
+
+create unique index user_table_login_uindex
+	on user_table (login);
+
+create unique index user_table_email_uindex
+	on user_table (email);
+
+create table movie_table
+(
+	id bigserial not null
+		constraint movie_table_pk
+			primary key,
+	movie_name varchar(50) not null,
+	year integer not null,
+	genre varchar(50),
+	rating double precision default 0.0,
+	description varchar(500)
+);
+
+alter table movie_table owner to postgres;
+
+create table actors
+(
+	id bigserial not null
+		constraint actors_pk
+			primary key,
+	first_name varchar not null,
+	last_name varchar not null,
+	age integer not null,
+	biography varchar(500)
+);
+
+alter table actors owner to postgres;
+
+create table l_movie_actors
+(
+	id bigserial not null
+		constraint l_movie_actors_pk
+			primary key,
+	actor_id integer not null
+		constraint l_movie_actors_actors_id_fk
+			references actors
+				on update cascade on delete cascade,
+	movie_id integer not null
+		constraint l_movie_actors_movie_table_id_fk
+			references movie_table
+				on update cascade on delete cascade
+);
+
+alter table l_movie_actors owner to postgres;
+
+create table l_user_movie
+(
+	id bigserial not null
+		constraint l_user_movie_pk
+			primary key,
+	user_id integer not null
+		constraint l_user_movie_user_table_id_fk
+			references user_table
+				on update cascade on delete cascade,
+	movie_id integer not null
+		constraint l_user_movie_movie_table_id_fk
+			references movie_table
+				on update cascade on delete cascade
+);
+
+alter table l_user_movie owner to postgres;
+
