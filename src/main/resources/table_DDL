@@ -1,4 +1,4 @@
-create table user_table
+create table if not exists user_table
 (
 	id bigserial not null
 		constraint user_table_pk
@@ -17,13 +17,13 @@ create table user_table
 
 alter table user_table owner to postgres;
 
-create unique index user_table_login_uindex
+create unique index if not exists user_table_login_uindex
 	on user_table (login);
 
-create unique index user_table_email_uindex
+create unique index if not exists user_table_email_uindex
 	on user_table (email);
 
-create table movie_table
+create table if not exists movie_table
 (
 	id bigserial not null
 		constraint movie_table_pk
@@ -37,7 +37,7 @@ create table movie_table
 
 alter table movie_table owner to postgres;
 
-create table actors
+create table if not exists actors
 (
 	id bigserial not null
 		constraint actors_pk
@@ -50,7 +50,7 @@ create table actors
 
 alter table actors owner to postgres;
 
-create table l_movie_actors
+create table if not exists l_movie_actors
 (
 	id bigserial not null
 		constraint l_movie_actors_pk
@@ -67,7 +67,7 @@ create table l_movie_actors
 
 alter table l_movie_actors owner to postgres;
 
-create table l_user_movie
+create table if not exists l_user_movie
 (
 	id bigserial not null
 		constraint l_user_movie_pk
@@ -83,4 +83,21 @@ create table l_user_movie
 );
 
 alter table l_user_movie owner to postgres;
+
+create table if not exists subscription_table
+(
+	id bigserial not null
+		constraint subscription_table_pk
+			primary key,
+	expire_date date not null,
+	user_id integer not null
+		constraint subscription_table_user_table_id_fk
+			references user_table
+				on update cascade on delete cascade
+);
+
+alter table subscription_table owner to postgres;
+
+create unique index if not exists subscription_table_user_id_uindex
+	on subscription_table (user_id);
 

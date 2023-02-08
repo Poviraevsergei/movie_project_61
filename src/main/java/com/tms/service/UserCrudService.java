@@ -52,8 +52,8 @@ public class UserCrudService {
             statement.setDate(5, new Date((new java.util.Date()).getTime()));
             statement.setDate(6, new Date((new java.util.Date()).getTime()));
             statement.setString(7, email);
-            statement.setDate(8, new Date((new java.util.Date()).getTime())); //TODO: CHANGE DATE
-            statement.setString(9, telephoneNumber); //TODO + to _
+            statement.setDate(8, new Date((new java.util.Date()).getTime()));
+            statement.setString(9, telephoneNumber);
 
             result = statement.executeUpdate();
         } catch (SQLException e) {

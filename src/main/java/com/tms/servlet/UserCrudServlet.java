@@ -47,7 +47,7 @@ public class UserCrudServlet extends HttpServlet {
         String password = req.getParameter("password");
         String email = req.getParameter("email");
         String telephoneNumber = req.getParameter("telephoneNumber");
-        boolean result = userCrudService.updateUser(id, firstName, lastName, login, password, email, telephoneNumber);
+        userCrudService.updateUser(id, firstName, lastName, login, password, email, telephoneNumber);
     }
 
     @Override
