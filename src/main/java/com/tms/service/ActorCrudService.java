@@ -81,4 +81,13 @@ public class ActorCrudService {
         }
         return result == 1;
     }
+
+    public int summa(int a, int b) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return a + b;
+    }
 }

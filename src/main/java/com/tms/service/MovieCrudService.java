@@ -15,6 +15,7 @@ public class MovieCrudService {
     }
 
     public Movie getMovieById(int id) {
+        //брось лог
         Movie movie = new Movie();
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM movie_table WHERE id=?");
