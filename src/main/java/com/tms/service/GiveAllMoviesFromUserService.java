@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class GiveAllMoviesFromUserService {
-
+/*
     {
         try {
             Class.forName("org.postgresql.Driver");
@@ -36,5 +36,5 @@ public class GiveAllMoviesFromUserService {
             System.out.println("something wrong....");
         }
         return movieList;
-    }
+    }*/
 }

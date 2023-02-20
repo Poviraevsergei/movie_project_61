@@ -68,4 +68,10 @@ public class ActorCrudServlet extends HttpServlet {
         actorCrudService.deleteActor(id);
     }
 
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.service(req, resp);
+    }
+
+
 }

@@ -5,7 +5,7 @@ import com.tms.domain.Movie;
 import java.sql.*;
 
 public class MovieCrudService {
-
+/*
     {
         try {
             Class.forName("org.postgresql.Driver");
@@ -84,5 +84,5 @@ public class MovieCrudService {
             System.out.println("something wrong....");
         }
         return result == 1;
-    }
+    }*/
 }

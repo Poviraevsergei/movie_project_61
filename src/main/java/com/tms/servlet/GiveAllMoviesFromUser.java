@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @WebServlet("/getMovies")
 public class GiveAllMoviesFromUser extends HttpServlet {
-    GiveAllMoviesFromUserService giveAllMoviesFromUserService = new GiveAllMoviesFromUserService();
+  /*  GiveAllMoviesFromUserService giveAllMoviesFromUserService = new GiveAllMoviesFromUserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -23,5 +23,5 @@ public class GiveAllMoviesFromUser extends HttpServlet {
         req.setAttribute("movieList", movieList.toString());
         getServletContext().getRequestDispatcher("/WEB-INF/jsp/allMovies.jsp").forward(req, resp);
 
-    }
+    }*/
 }

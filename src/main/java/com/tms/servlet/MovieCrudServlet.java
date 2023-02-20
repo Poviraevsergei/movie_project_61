@@ -12,6 +12,7 @@ import java.io.IOException;
 
 @WebServlet("/movie")
 public class MovieCrudServlet extends HttpServlet {
+/*
 
     MovieCrudService movieCrudService = new MovieCrudService();
 
@@ -54,4 +55,5 @@ public class MovieCrudServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         movieCrudService.deleteMovie(id);
     }
+*/
 }

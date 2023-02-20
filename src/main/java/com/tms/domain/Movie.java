@@ -1,8 +1,15 @@
 package com.tms.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data //POJO (Plain old java object)
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Data
+@Scope
 public class Movie {
     private int id;
     private String movieName;
@@ -10,4 +17,7 @@ public class Movie {
     private String genre;
     private double rating;
     private String description;
+
+    @Autowired//DI
+    private Actor actor;
 }
