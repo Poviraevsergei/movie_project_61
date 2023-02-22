@@ -1,10 +1,19 @@
 package com.tms.service;
 
+import com.tms.domain.Movie;
 import com.tms.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.util.ArrayList;
 
-public class UserCrudService {
+@Service
+public class UserService {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     {
         try {
@@ -93,6 +102,46 @@ public class UserCrudService {
             result = statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("something wrong....");
+        }
+        return result == 1;
+    }
+
+    public ArrayList<Movie> getMoviesForSingleUser(int id) {
+        ArrayList<Movie> movieList = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
+            PreparedStatement statement = connection.prepareStatement("SELECT m.id,m.movie_name,m.year,m.genre,m.rating,m.description FROM l_user_movie JOIN movie_table as m ON l_user_movie.movie_id = m.id WHERE l_user_movie.user_id=?");
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Movie movie = new Movie();
+                movie.setId(resultSet.getInt("id"));
+                movie.setMovieName(resultSet.getString("movie_name"));
+                movie.setYear(resultSet.getInt("year"));
+                movie.setGenre(resultSet.getString("genre"));
+                movie.setRating(resultSet.getDouble("rating"));
+                movie.setDescription(resultSet.getString("description"));
+                movieList.add(movie);
+            }
+        } catch (SQLException e) {
+            System.out.println("something wrong....");
+        }
+        return movieList;
+    }
+
+
+    public boolean addMovieToUser(int userId, int movieId){
+        int result = 0;
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
+
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO l_user_movie (id, user_id, movie_id) " +
+                    "VALUES (DEFAULT, ?, ?)");
+            statement.setInt(1, userId);
+            statement.setInt(2, movieId);
+
+            result = statement.executeUpdate();
+        } catch (SQLException e) {
+            log.warn("Something wrong: " + e);
         }
         return result == 1;
     }

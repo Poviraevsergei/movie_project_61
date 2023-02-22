@@ -1,11 +1,12 @@
 package com.tms.service;
 
 import com.tms.domain.Actor;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
 
-public class ActorCrudService {
-
+@Service
+public class ActorService {
     {
         try {
             Class.forName("org.postgresql.Driver");
@@ -36,7 +37,6 @@ public class ActorCrudService {
     public boolean createActor(String firstName, String lastName, int age, String biography) {
         int result = 0;
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
-
             PreparedStatement statement = connection.prepareStatement("INSERT INTO actors (id, first_name, last_name, age, biography) " +
                     "VALUES (DEFAULT, ?, ?, ?, ?)");
             statement.setString(1, firstName);
