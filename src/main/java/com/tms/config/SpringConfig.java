@@ -14,6 +14,14 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan("com.tms")
 public class SpringConfig implements WebMvcConfigurer {
 
+    {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Bean
     public InternalResourceViewResolver getInternalResourceViewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
