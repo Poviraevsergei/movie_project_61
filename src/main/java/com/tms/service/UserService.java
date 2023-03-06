@@ -18,6 +18,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public ArrayList<User> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
     public User getUserById(int id) {
         return userRepository.getUserById(id);
     }

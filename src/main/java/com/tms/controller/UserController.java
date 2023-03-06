@@ -28,6 +28,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public String getAllUser(Model model) {
+        ArrayList<User> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "allUsers";
+    }
+
     @GetMapping("/{id}")
     public String getUserById(@PathVariable int id, Model model) {
         User user = userService.getUserById(id);

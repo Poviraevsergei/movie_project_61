@@ -1,4 +1,4 @@
-<#macro userInfo user>
+<#macro userInfoName user>
     <h1> Hello, this is your User!</h1>
     <h3>User id: ${user.id}</h3>
     <h3>User first name: ${user.firstName}></h3>

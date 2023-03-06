@@ -14,6 +14,33 @@ public class UserRepository {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    public ArrayList<User> getAllUsers() {
+        ArrayList<User> resultList = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_table");
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setLogin(resultSet.getString("login"));
+                user.setPassword(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setChanged(resultSet.getDate("changed"));
+                user.setEmail(resultSet.getString("email"));
+                user.setBirthdate(resultSet.getDate("birthday_date"));
+                user.setDeleted(resultSet.getBoolean("is_deleted"));
+                user.setTelephoneNumber(resultSet.getString("telephone"));
+                resultList.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("something wrong....");
+        }
+        return resultList;
+    }
+
     public User getUserById(int id) {
         User user = new User();
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
