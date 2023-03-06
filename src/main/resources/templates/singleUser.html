@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<html>
+<head>
+    <title>User info</title>
+</head>
+<body>
+<a th:href="@{/user/1}">Get all users</a>
+
+<h1> Hello, this is your User!</h1>
+<div th:inline="text" th:object="${user}">
+    <h3>User id:  [[*{id}]]</h3>
+    <h3>User first name:  [[*{firstName}]]</h3>
+    <h3>User last name:  [[*{lastName}]]</h3>
+    <h3>User birthdate:  [[*{birthdate}]]</h3>
+    <h3>User login:  [[*{login}]]</h3>
+    <h3>User password:  [[*{password}]]</h3>
+    <h3>User email:  [[*{email}]]</h3>
+    <h3>User telephone:  [[*{telephoneNumber}]]</h3>
+</div>
+</body>
+</html>
