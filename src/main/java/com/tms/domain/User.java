@@ -1,5 +1,6 @@
 package com.tms.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tms.annotation.FirstCharacter8;
 import lombok.Data;
 import org.springframework.stereotype.Component;

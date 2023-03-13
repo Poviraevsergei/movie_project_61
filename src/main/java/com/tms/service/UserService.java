@@ -30,8 +30,8 @@ public class UserService {
         return userRepository.createUser(user);
     }
 
-    public boolean updateUser(int id, String firstName, String lastName, String login, String password, String email, String telephoneNumber) {
-        return userRepository.updateUser(id, firstName, lastName, login, password, email, telephoneNumber);
+    public boolean updateUser(User user) {
+        return userRepository.updateUser(user);
     }
 
     public boolean deleteUser(int id) {
