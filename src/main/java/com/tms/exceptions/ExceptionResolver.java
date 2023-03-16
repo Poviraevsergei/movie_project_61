@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-@CacheEvict
 public class ExceptionResolver {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
