@@ -1,5 +1,6 @@
 package com.tms.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -51,6 +52,7 @@ public class FileController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @Tag(name = "testTag")
     @GetMapping
     public ResponseEntity<ArrayList<String>> getFiles() {
         try {
