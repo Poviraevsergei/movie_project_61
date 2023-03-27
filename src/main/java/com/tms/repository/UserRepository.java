@@ -22,19 +22,18 @@ public class UserRepository {
 
     public ArrayList<User> getAllUsers() {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
+
         Query query = session.createQuery("from User");
         ArrayList<User> list = (ArrayList<User>) query.getResultList();
-        session.getTransaction().commit();
         session.close();
         return list;
     }
 
     public User getUserById(int id) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        User user = session.get(User.class, id);
-        session.getTransaction().commit();
+        Query query = session.createQuery("from User u where u.id=:userId");
+        query.setParameter("userId", id);
+        User user = (User) query.getSingleResult();
         session.close();
         if (user != null) {
             return user;
@@ -46,7 +45,19 @@ public class UserRepository {
         try {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            session.save(user);
+            Query query = session.createNativeQuery("INSERT INTO user_table (id, first_name, last_name, login, password, created, changed,email,birthday_date,is_deleted, telephone)" +
+                    "VALUES (DEFAULT, :first_name, :last_name, :login, :password, :created, :changed, :email, :birthday_date, DEFAULT, :telephone)");
+            query.setParameter("first_name", user.getFirstName());
+            query.setParameter("last_name", user.getLastName());
+            query.setParameter("login", user.getLogin());
+            query.setParameter("password", user.getPassword());
+            query.setParameter("created", user.getCreated());
+            query.setParameter("changed", user.getChanged());
+            query.setParameter("email", user.getEmail());
+            query.setParameter("changed", user.getChanged());
+            query.setParameter("birthday_date", user.getBirthdate());
+            query.setParameter("telephone", user.getTelephoneNumber());
+            query.executeUpdate();
             session.getTransaction().commit();
             session.close();
             return true;
@@ -59,8 +70,18 @@ public class UserRepository {
     public boolean updateUser(User user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        user.setChanged(new Date(System.currentTimeMillis()));
-        session.saveOrUpdate(user);
+        Query query = session.createQuery("UPDATE User set firstName=:firstName, lastName=:lastName, changed=:changed," +
+                " login=:login, password=:password, email=:email, birthdate=:birthday_date, telephoneNumber=:telephone WHERE id=:userId");
+        query.setParameter("userId", user.getId());
+        query.setParameter("firstName", user.getFirstName());
+        query.setParameter("lastName", user.getLastName());
+        query.setParameter("changed", new Date(System.currentTimeMillis()));
+        query.setParameter("login", user.getLogin());
+        query.setParameter("password", user.getPassword());
+        query.setParameter("email", user.getEmail());
+        query.setParameter("birthday_date", user.getBirthdate());
+        query.setParameter("telephone", user.getTelephoneNumber());
+        query.executeUpdate();
         session.getTransaction().commit();
         session.close();
         return true;
@@ -70,46 +91,34 @@ public class UserRepository {
         try {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            User user = session.get(User.class,id);
-            user.setDeleted(true);
+            Query query = session.createQuery("UPDATE User set isDeleted=true WHERE id=:userId");
+            query.setParameter("userId", id);
+            query.executeUpdate();
             session.getTransaction().commit();
             session.close();
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
         return false;
     }
 
-    //TODO: Query Hibernate
     public ArrayList<Movie> getMoviesForSingleUser(int id) {
-        ArrayList<Movie> movieList = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
-            PreparedStatement statement = connection.prepareStatement("SELECT m.id,m.movie_name,m.year,m.genre,m.rating,m.description FROM l_user_movie JOIN movie_table as m ON l_user_movie.movie_id = m.id WHERE l_user_movie.user_id=?");
-            statement.setInt(1, id);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Movie movie = new Movie();
-                movie.setId(resultSet.getInt("id"));
-                movie.setMovieName(resultSet.getString("movie_name"));
-                movie.setYear(resultSet.getInt("year"));
-                movie.setGenre(resultSet.getString("genre"));
-                movie.setRating(resultSet.getDouble("rating"));
-                movie.setDescription(resultSet.getString("description"));
-                movieList.add(movie);
-            }
-        } catch (SQLException e) {
-            System.out.println("something wrong....");
-        }
-        return movieList;
+        Session session = sessionFactory.openSession();
+        Query query = session.createNativeQuery("SELECT m.id,m.movie_name,m.year,m.genre,m.rating,m.description FROM l_user_movie JOIN movie_table as m ON l_user_movie.movie_id = m.id WHERE l_user_movie.user_id=:userId");
+        query.setParameter("userId", id);
+        return (ArrayList<Movie>) query.getResultList();
     }
 
-    //TODO: Query Hibernate
     public boolean addMovieToUser(int userId, int movieId) {
-      /*  int result = template.update("INSERT INTO l_user_movie (id, user_id, movie_id) " +
-                "VALUES (DEFAULT, ?, ?)", new Object[]{userId, movieId});
-        return result == 1;*/
-        return true;
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createNativeQuery("INSERT INTO l_user_movie (id, user_id, movie_id) " +
+                "VALUES (DEFAULT, :userId, :movieId)");
+        query.setParameter("userId",userId);
+        query.setParameter("movieId",movieId);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        return result == 1;
     }
 }
