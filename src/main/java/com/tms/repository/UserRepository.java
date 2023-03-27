@@ -8,6 +8,9 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -31,8 +34,11 @@ public class UserRepository {
 
     public User getUserById(int id) {
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("from User u where u.id=:userId");
-        query.setParameter("userId", id);
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<User> cr = cb.createQuery(User.class);
+        Root<User> root = cr.from(User.class);
+        cr.select(root).where(cb.equal(root.get("id"),id));
+        Query query = session.createQuery(cr);
         User user = (User) query.getSingleResult();
         session.close();
         if (user != null) {
