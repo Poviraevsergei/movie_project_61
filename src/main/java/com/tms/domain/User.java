@@ -17,13 +17,13 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "user_table")
-@ToString(exclude = {"subField","movieList"})
-@EqualsAndHashCode(exclude = {"subField","movieList"})
+@ToString(exclude = {"subField", "movieList", "commentList"})
+@EqualsAndHashCode(exclude = {"subField", "movieList", "commentList"})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq_gen")
-    @SequenceGenerator(name="user_id_seq_gen", sequenceName = "user_table_id_seq", allocationSize = 1) //TODO: under config class
+    @SequenceGenerator(name = "user_id_seq_gen", sequenceName = "user_table_id_seq", allocationSize = 1)
     private int id;
 
     @Column(name = "first_name")
@@ -66,11 +66,15 @@ public class User {
     private Subscription subField;
 
     @JsonManagedReference
-    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "l_user_movie",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "movie_id") }
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "movie_id")}
     )
     private Set<Movie> movieList = new HashSet<>();
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Comment> commentList = new HashSet<>();
 }

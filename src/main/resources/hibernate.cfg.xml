@@ -19,5 +19,6 @@
         <mapping class="com.tms.domain.Subscription"/>
         <mapping class="com.tms.domain.Movie"/>
         <mapping class="com.tms.domain.Actor"/>
+        <mapping class="com.tms.domain.Comment"/>
     </session-factory>
 </hibernate-configuration>
