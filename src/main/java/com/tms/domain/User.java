@@ -1,19 +1,24 @@
 package com.tms.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tms.annotation.FirstCharacter8;
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "user_table")
+@ToString(exclude = {"subField","movieList"})
+@EqualsAndHashCode(exclude = {"subField","movieList"})
 public class User {
 
     @Id
@@ -54,4 +59,18 @@ public class User {
     @FirstCharacter8
     @Column(name = "telephone")
     private String telephoneNumber;
+
+    @JsonManagedReference
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sub_id", referencedColumnName = "id")
+    private Subscription subField;
+
+    @JsonManagedReference
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "l_user_movie",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "movie_id") }
+    )
+    private Set<Movie> movieList = new HashSet<>();
 }

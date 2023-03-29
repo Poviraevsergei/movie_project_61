@@ -1,25 +1,42 @@
 package com.tms.domain;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-@Component
 @Data
-@Scope
+@Entity
+@Table(name = "movie_table")
+@ToString(exclude = {"userList"})
+@EqualsAndHashCode(exclude = {"userList"})
 public class Movie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mov_id_seq_gen")
+    @SequenceGenerator(name="mov_id_seq_gen", sequenceName = "movie_table_id_seq", allocationSize = 1)
     private int id;
+
+    @Column(name = "movie_name")
     private String movieName;
-    private int year;
+
+    @Column(name = "year")
+    private Integer year;
+
+    @Column(name = "genre")
     private String genre;
-    private double rating;
+
+    @Column(name = "rating")
+    private Double rating;
+
+    @Column(name = "description")
     private String description;
 
-    @Autowired//DI
-    private Actor actor;
+    @JsonBackReference
+    @ManyToMany(mappedBy = "movieList")
+    private Set<User> userList = new HashSet<>();
 }

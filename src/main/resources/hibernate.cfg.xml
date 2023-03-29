@@ -16,5 +16,8 @@
         <property name="format_sql">true</property>
 
         <mapping class="com.tms.domain.User"/>
+        <mapping class="com.tms.domain.Subscription"/>
+        <mapping class="com.tms.domain.Movie"/>
+        <mapping class="com.tms.domain.Actor"/>
     </session-factory>
 </hibernate-configuration>

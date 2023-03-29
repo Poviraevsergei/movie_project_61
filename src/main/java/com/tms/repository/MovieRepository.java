@@ -1,30 +1,44 @@
 package com.tms.repository;
 
 import com.tms.domain.Movie;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 @Repository
 public class MovieRepository {
-    public Movie getMovieById(int id) {
-        Movie movie = new Movie();
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/movie_db", "postgres", "root")) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM movie_table WHERE id=?");
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
 
-            resultSet.next();
-            movie.setId(resultSet.getInt("id"));
-            movie.setMovieName(resultSet.getString("movie_name"));
-            movie.setYear(resultSet.getInt("year"));
-            movie.setGenre(resultSet.getString("genre"));
-            movie.setRating(resultSet.getDouble("rating"));
-            movie.setDescription(resultSet.getString("description"));
-        } catch (SQLException e) {
-            System.out.println("something wrong....");
+    private final SessionFactory sessionFactory;
+
+    @Autowired
+    public MovieRepository() {
+        this.sessionFactory = new Configuration().configure().buildSessionFactory();
+    }
+
+    public Movie getMovieById(int id) {
+        Session session = sessionFactory.openSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Movie> cr = cb.createQuery(Movie.class);
+        Root<Movie> root = cr.from(Movie.class);
+        cr.select(root).where(cb.equal(root.get("id"), id));
+        Query query = session.createQuery(cr);
+        Movie movie = (Movie) query.getSingleResult();
+        session.close();
+        if (movie != null) {
+            return movie;
         }
-        return movie;
+        return new Movie();
     }
 
     public boolean createMovie(String movieName, int year, String genre, Double rating, String description) {

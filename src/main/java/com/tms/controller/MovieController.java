@@ -5,11 +5,9 @@ import com.tms.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/movie")
 public class MovieController {
 
@@ -23,14 +21,8 @@ public class MovieController {
     private static final Logger log = LoggerFactory.getLogger(MovieController.class);
 
     @GetMapping("/{id}")
-    public String getMovie(@PathVariable int id, Model model) {
-        log.info("doing /movie Get method!");
-        Movie movie = movieService.getMovieById(id);
-        if (movie.getId() == 0) {
-            log.warn("Movie is not found! Trying find id=" + id);
-        }
-        model.addAttribute("movie", movie);
-        return "singleMovie";
+    public Movie getMovie(@PathVariable int id) {
+        return movieService.getMovieById(id);
     }
 
     @PostMapping
