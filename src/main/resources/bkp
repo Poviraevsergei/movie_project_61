@@ -1,0 +1,27 @@
+
+
+
+
+
+
+
+
+
+    public ArrayList<Movie> getMoviesForSingleUser(int id) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createNativeQuery("SELECT m.id,m.movie_name,m.year,m.genre,m.rating,m.description FROM l_user_movie JOIN movie_table as m ON l_user_movie.movie_id = m.id WHERE l_user_movie.user_id=:userId");
+        query.setParameter("userId", id);
+        return (ArrayList<Movie>) query.getResultList();
+    }
+
+    public boolean addMovieToUser(int userId, int movieId) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createNativeQuery("INSERT INTO l_user_movie (id, user_id, movie_id) " +
+                "VALUES (DEFAULT, :userId, :movieId)");
+        query.setParameter("userId",userId);
+        query.setParameter("movieId",movieId);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        return result == 1;
+    }*/

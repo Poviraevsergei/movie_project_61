@@ -1,9 +1,7 @@
 package com.tms.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tms.annotation.FirstCharacter8;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -19,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq_gen")
     @SequenceGenerator(name="user_id_seq_gen", sequenceName = "user_table_id_seq", allocationSize = 1) //TODO: under config class
-    private int id;
+    private Integer id;
 
     @Column(name = "first_name")
     private String firstName;

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -36,7 +37,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<ArrayList<User>> getAllUser() {
         ArrayList<User> list = userService.getAllUsers();
-        return new ResponseEntity<>(list,(!list.isEmpty())?HttpStatus.OK:HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(list, (!list.isEmpty()) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Он вам отдаст юзера по его id")
@@ -48,21 +49,27 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@Parameter(description = "Эта та самая id которую нужно передать") @PathVariable int id) {
         User user = userService.getUserById(id);
-        if (user == null){
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/ln/{ln}")
+    public ResponseEntity<User> findUserByLastName(@PathVariable String ln) {
+        Optional<User> user = userService.findUserByLastName(ln);
+        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
     @GetMapping("/getMovies/{id}")
     public ResponseEntity<ArrayList<Movie>> giveAllMoviesForThisUser(@PathVariable int id) {
-        return new ResponseEntity<>(userService.getMoviesForSingleUser(id),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getMoviesForSingleUser(id), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<HttpStatus> createUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            for (ObjectError o :bindingResult.getAllErrors()){
+            for (ObjectError o : bindingResult.getAllErrors()) {
                 log.warn("We have bindingResult error : " + o);
             }
         }
