@@ -4,6 +4,7 @@ import com.tms.domain.Movie;
 import com.tms.domain.User;
 import com.tms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class UserService {
     }
 
     public User getUserById(int id) {
+        String userLogin = SecurityContextHolder.getContext().getAuthentication().getName(); // Who authenticated!
         return userRepository.findById(id).orElse(new User());
     }
 

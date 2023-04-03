@@ -10,16 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
     Optional<User> findUserByLastName(String ln);
 
-
     @Modifying
-    //@Query(nativeQuery = true, value = "UPDATE user_table SET is_deleted =true WHERE id = ?")
-    //TODO: WHY NATIVE DO NOT WORK!
-    @Query(value = "update User u set u.isDeleted =true where u.id = :id")        //HQL
+    @Query(nativeQuery = true, value = "UPDATE user_table SET is_deleted =true WHERE id = :id", countQuery = "SELECT * from user_table WHERE id = :id")
     void deleteUser(Integer id);
-
 
 /*    @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO l_user_movie (id, user_id, movie_id) VALUES (DEFAULT, :userId, :movieId)")
