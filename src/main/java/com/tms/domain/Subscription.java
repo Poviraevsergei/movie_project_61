@@ -1,6 +1,5 @@
 package com.tms.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,8 +23,4 @@ public class Subscription {
 
     @Column(name = "expire_date")
     private Date expireDate;
-
-    @JsonBackReference
-    @OneToOne(mappedBy = "subField")
-    private User user;
 }

@@ -20,5 +20,7 @@
         <mapping class="com.tms.domain.Movie"/>
         <mapping class="com.tms.domain.Actor"/>
         <mapping class="com.tms.domain.Comment"/>
+        <mapping class="com.tms.domain.dto.UserHibernateDto"/>
+        <mapping class="com.tms.domain.dto.MovieHibernateDto"/>
     </session-factory>
 </hibernate-configuration>

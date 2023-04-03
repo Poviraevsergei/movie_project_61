@@ -1,5 +1,6 @@
 package com.tms.config;
 
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,5 +35,10 @@ public class SpringDatabaseConfig {
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource){
         return new JdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public SessionFactory getSessionFactory(){
+        return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
     }
 }

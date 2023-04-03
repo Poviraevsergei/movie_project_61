@@ -1,17 +1,17 @@
 package com.tms.repository;
 
 import com.tms.domain.Movie;
-import com.tms.domain.User;
+import com.tms.domain.dto.UserHibernateDto;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.sql.*;
+import java.sql.Date;
 import java.util.ArrayList;
 
 @Repository
@@ -19,35 +19,37 @@ public class UserRepository {
 
     private final SessionFactory sessionFactory;
 
-    public UserRepository() {
-        this.sessionFactory = new Configuration().configure().buildSessionFactory(); //TODO:to configure class
+    @Autowired
+    public UserRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public ArrayList<User> getAllUsers() {
+
+    public ArrayList<UserHibernateDto> getAllUsers() {
         Session session = sessionFactory.openSession();
 
-        Query query = session.createQuery("from User");
-        ArrayList<User> list = (ArrayList<User>) query.getResultList();
+        Query query = session.createQuery("from UserHibernateDto");
+        ArrayList<UserHibernateDto> list = (ArrayList<UserHibernateDto>) query.getResultList();
         session.close();
         return list;
     }
 
-    public User getUserById(int id) {
+    public UserHibernateDto getUserById(int id) {
         Session session = sessionFactory.openSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<User> cr = cb.createQuery(User.class);
-        Root<User> root = cr.from(User.class);
+        CriteriaQuery<UserHibernateDto> cr = cb.createQuery(UserHibernateDto.class);
+        Root<UserHibernateDto> root = cr.from(UserHibernateDto.class);
         cr.select(root).where(cb.equal(root.get("id"),id));
         Query query = session.createQuery(cr);
-        User user = (User) query.getSingleResult();
+        UserHibernateDto userHibernateDto = (UserHibernateDto) query.getSingleResult();
         session.close();
-        if (user != null) {
-            return user;
+        if (userHibernateDto != null) {
+            return userHibernateDto;
         }
-        return new User();
+        return new UserHibernateDto();
     }
 
-    public boolean createUser(User user) {
+    public boolean createUser(UserHibernateDto user) {
         try {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
@@ -73,10 +75,10 @@ public class UserRepository {
         return false;
     }
 
-    public boolean updateUser(User user) {
+    public boolean updateUser(UserHibernateDto user) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("UPDATE User set firstName=:firstName, lastName=:lastName, changed=:changed," +
+        Query query = session.createQuery("UPDATE UserHibernateDto set firstName=:firstName, lastName=:lastName, changed=:changed," +
                 " login=:login, password=:password, email=:email, birthdate=:birthday_date, telephoneNumber=:telephone WHERE id=:userId");
         query.setParameter("userId", user.getId());
         query.setParameter("firstName", user.getFirstName());
@@ -97,7 +99,7 @@ public class UserRepository {
         try {
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            Query query = session.createQuery("UPDATE User set isDeleted=true WHERE id=:userId");
+            Query query = session.createQuery("UPDATE UserHibernateDto set isDeleted=true WHERE id=:userId");
             query.setParameter("userId", id);
             query.executeUpdate();
             session.getTransaction().commit();

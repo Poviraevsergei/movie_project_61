@@ -1,11 +1,11 @@
 package com.tms.service;
 
 import com.tms.domain.Movie;
+import com.tms.domain.dto.MovieHibernateDto;
 import com.tms.repository.MovieRepository;
+import com.tms.utils.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.sql.*;
 
 @Service
 public class MovieService {
@@ -18,7 +18,8 @@ public class MovieService {
     }
 
     public Movie getMovieById(int id) {
-        return movieRepository.getMovieById(id);
+        MovieHibernateDto movieHibernateDto = movieRepository.getMovieById(id);
+        return DtoMapper.fromMovieHibernateDtoToMovie(movieHibernateDto);
     }
 
     public boolean createMovie(String movieName, int year, String genre, Double rating, String description) {

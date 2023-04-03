@@ -2,7 +2,9 @@ package com.tms.service;
 
 import com.tms.domain.Movie;
 import com.tms.domain.User;
+import com.tms.domain.dto.UserHibernateDto;
 import com.tms.repository.UserRepository;
+import com.tms.utils.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +21,25 @@ public class UserService {
     }
 
     public ArrayList<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        ArrayList<UserHibernateDto> listUserDto = userRepository.getAllUsers();
+        ArrayList<User> resultUserlist = new ArrayList<>();
+        for (UserHibernateDto u : listUserDto) {
+            //DTOMapper
+        }
+        return resultUserlist;
     }
 
     public User getUserById(int id) {
-        return userRepository.getUserById(id);
+        UserHibernateDto userDto = userRepository.getUserById(id);
+        return DtoMapper.fromHibernateUserDtoToUser(userDto);
     }
 
     public boolean createUser(User user) {
-        return userRepository.createUser(user);
+        return userRepository.createUser(DtoMapper.fromUserToUserHibernateDto(user));
     }
 
     public boolean updateUser(User user) {
-        return userRepository.updateUser(user);
+        return userRepository.updateUser(DtoMapper.fromUserToUserHibernateDto(user));
     }
 
     public boolean deleteUser(int id) {

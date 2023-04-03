@@ -1,6 +1,5 @@
 package com.tms.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,9 +19,4 @@ public class Comment {
 
     @Column(name = "comment")
     private String comment;
-
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 }

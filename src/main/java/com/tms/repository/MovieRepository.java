@@ -1,6 +1,6 @@
 package com.tms.repository;
 
-import com.tms.domain.Movie;
+import com.tms.domain.dto.MovieHibernateDto;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -26,19 +26,19 @@ public class MovieRepository {
         this.sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
-    public Movie getMovieById(int id) {
+    public MovieHibernateDto getMovieById(int id) {
         Session session = sessionFactory.openSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<Movie> cr = cb.createQuery(Movie.class);
-        Root<Movie> root = cr.from(Movie.class);
+        CriteriaQuery<MovieHibernateDto> cr = cb.createQuery(MovieHibernateDto.class);
+        Root<MovieHibernateDto> root = cr.from(MovieHibernateDto.class);
         cr.select(root).where(cb.equal(root.get("id"), id));
         Query query = session.createQuery(cr);
-        Movie movie = (Movie) query.getSingleResult();
+        MovieHibernateDto movie = (MovieHibernateDto) query.getSingleResult();
         session.close();
         if (movie != null) {
             return movie;
         }
-        return new Movie();
+        return new MovieHibernateDto();
     }
 
     public boolean createMovie(String movieName, int year, String genre, Double rating, String description) {
