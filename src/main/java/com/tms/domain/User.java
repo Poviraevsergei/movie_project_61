@@ -52,4 +52,7 @@ public class User {
     @FirstCharacter8
     @Column(name = "telephone")
     private String telephoneNumber;
+
+    @Column(name = "role")
+    private String role;
 }
