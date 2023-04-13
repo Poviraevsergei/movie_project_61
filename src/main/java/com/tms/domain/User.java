@@ -6,7 +6,6 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.sql.Date;
 
 @Data
@@ -30,7 +29,6 @@ public class User {
     private String login;
 
     @Column(name = "password")
-    @Size(min = 5, max = 10)
     private String password;
 
     @Column(name = "created")
@@ -47,7 +45,7 @@ public class User {
     private Date birthdate;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @FirstCharacter8
     @Column(name = "telephone")

@@ -2,6 +2,7 @@ package com.tms.controller;
 
 import com.tms.domain.Movie;
 import com.tms.domain.User;
+import com.tms.domain.request.UserRegistrationRequest;
 import com.tms.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -89,5 +90,11 @@ public class UserController {
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<HttpStatus> registration(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+        Boolean result = userService.userRegistration(userRegistrationRequest);
+        return new ResponseEntity<>(result ? HttpStatus.CREATED : HttpStatus.CONFLICT);
     }
 }

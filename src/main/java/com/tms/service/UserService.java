@@ -2,9 +2,11 @@ package com.tms.service;
 
 import com.tms.domain.Movie;
 import com.tms.domain.User;
+import com.tms.domain.request.UserRegistrationRequest;
 import com.tms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +17,14 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final String USER_ROLE = "USER";
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public ArrayList<User> getAllUsers() {
@@ -55,7 +60,24 @@ public class UserService {
     }
 
     public void addMovieToUser(int userId, int movieId) {
-      //   userRepository.addMovieToUser(userId, movieId);
+        //   userRepository.addMovieToUser(userId, movieId);
 
+    }
+
+    public Boolean userRegistration(UserRegistrationRequest userRegistrationRequest) {
+        User user = new User();
+        user.setFirstName(userRegistrationRequest.getFirstName());
+        user.setLastName(userRegistrationRequest.getLastName());
+        user.setEmail(userRegistrationRequest.getEmail());
+        user.setLogin(userRegistrationRequest.getLogin());
+        user.setPassword(passwordEncoder.encode(userRegistrationRequest.getPassword()));
+        user.setTelephoneNumber(userRegistrationRequest.getTelephoneNumber());
+        user.setBirthdate(userRegistrationRequest.getBirthdate());
+        user.setCreated(new Date(System.currentTimeMillis()));
+        user.setChanged(new Date(System.currentTimeMillis()));
+        user.setIsDeleted(false);
+        user.setRole(USER_ROLE);
+
+        return userRepository.save(user)!=null;
     }
 }
